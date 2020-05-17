@@ -1,13 +1,13 @@
 #include "model.h"
 #include <math.h>
-
+#include <stdio.h>
 //Поиск наименьшего радиус-вектора a -> b
 Vector closest_radius (Vector loc_a, Vector loc_b) {
     double res_x, res_y;
     int flag_x = abs(loc_b.x-loc_a.x)<=1.0 ? 0 : 1 ;
     int flag_y = abs(loc_b.y-loc_a.y)<=1.0 ? 0 : 1 ;
-    res_x = loc_a.x < 0 ? flag_x*(loc_b.x - loc_a.x) + (1-flag_x)*((-1.0 - loc_a.x) + (loc_b.x - 1.0)) : flag_x*(loc_b.x - loc_a.x) + (1-flag_x)*((1.0 - loc_a.x) + (loc_b.x + 1.0));
-    res_y = loc_a.y < 0 ? flag_y*(loc_b.y - loc_a.y) + (1-flag_y)*((-1.0 - loc_a.y) + (loc_b.y - 1.0)) : flag_y*(loc_b.y - loc_a.y) + (1-flag_y)*((1.0 - loc_a.y) + (loc_b.y + 1.0));
+    res_x = loc_a.x < 0 ? (1-flag_x)*(loc_b.x - loc_a.x) + flag_x*((-1.0 - loc_a.x) + (loc_b.x - 1.0)) : (1-flag_x)*(loc_b.x - loc_a.x) + flag_x*((1.0 - loc_a.x) + (loc_b.x + 1.0));
+    res_y = loc_a.y < 0 ? (1-flag_y)*(loc_b.y - loc_a.y) + flag_y*((-1.0 - loc_a.y) + (loc_b.y - 1.0)) : (1-flag_y)*(loc_b.y - loc_a.y) + flag_y*((1.0 - loc_a.y) + (loc_b.y + 1.0));
     Vector res = {res_x, res_y};
     return res;
 }
@@ -21,6 +21,10 @@ void teleport_body (Vector *loc) {
     }
 }
 
+//УДААААААААААААААААААААААААААААААААР (упругий)
+void elastic_collision(Vector loc_a, Vector loc_b, Vector v_a, Vector v_b) {
+
+}
 
 //Шаг по времени по схеме 'предиктор-корректор'
 void model_predictor_time_step(Model *model, double dt) {
@@ -46,10 +50,11 @@ void model_predictor_time_step(Model *model, double dt) {
     //новое, 'предсказанное' значение ускорения
     Vector radius_vec_predict = closest_radius(model->a.loc, model->b.loc);
     double len_r_predict = vector_len(radius_vec_predict);
+
     Vector acc_a_predict = vector_x_double(radius_vec_predict, (model->G*model->b.m/(len_r_predict*len_r_predict*len_r_predict)));
     Vector acc_b_predict = vector_x_double(radius_vec_predict, -(model->G*model->a.m/(len_r_predict*len_r_predict*len_r_predict)));
 
     //на основе среднего ускорения вычисляем новую скорость
-    model->a.v = vector_x_double(vector_sum(acc_a, acc_a_predict), dt*0.5);
-    model->b.v = vector_x_double(vector_sum(acc_b, acc_b_predict), dt*0.5);
+    model->a.v = vector_sum(model->a.v, vector_x_double(vector_sum(acc_a, acc_a_predict), dt*0.5));
+    model->b.v = vector_sum(model->b.v, vector_x_double(vector_sum(acc_b, acc_b_predict), dt*0.5));
 }

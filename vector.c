@@ -1,12 +1,13 @@
 #include "vector.h"
+#include <math.h>
 
 double vector_len (Vector vec) {
-    return (vec.x)*(vec.x)+(vec.y)*(vec.y);
+    return sqrt((vec.x)*(vec.x)+(vec.y)*(vec.y));
 }
 
 Vector vector_x_double (Vector vec, double gamma) {
-    vec.x *= gamma;
-    vec.y *= gamma;
+    Vector res = {vec.x *= gamma, vec.y *= gamma};
+    return res;
 }
 
 Vector vector_sum (Vector vec_a, Vector vec_b) {

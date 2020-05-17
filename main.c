@@ -66,7 +66,7 @@ int main(int agc, char **argv) {
 		SDL_Renderer *main_renderer = NULL;
 		SDL_TimerID timer_id;
 
-		int const SCREEN_WIDTH = 700, SCREEN_HEIGHT = 700; //TODO(Сыграть с нормировкой пространства в НЕквадратном окне)
+		int const SCREEN_WIDTH = 1000, SCREEN_HEIGHT = 700; //TODO(Сыграть с нормировкой пространства в НЕквадратном окне)
 		const char *error_message = "";
 
 		if (*(error_message = init_window_and_renderer(&main_window, &main_renderer, SCREEN_WIDTH, SCREEN_HEIGHT, "SDL Render Draw Example"))) {
@@ -75,14 +75,14 @@ int main(int agc, char **argv) {
 		}
 
         //Данные модели (model) и шаг по времени (dt)
-		Model model = {0.1, {-0.5, 0}, {1, 1},
-                       0.1, {0.5, 0}, {1, 1},
-                       0.005};
-		double dt = 2.5e-5; //TODO(Значение G const)
+		Model model = {1, {-0.5, 0}, {0, 5},
+                       1, {0.5, 0}, {0, -5},
+                       0.05};
+		double dt = 2.5e-7; //TODO(Значение G const)
 
         //При изменении начального положения тел в модели изменить и здесь (?)
-		IKI_Circle circle_a = { SCREEN_WIDTH/4, SCREEN_HEIGHT/2, 50 };
-		IKI_Circle circle_b = { 3*SCREEN_WIDTH/4, SCREEN_HEIGHT/2, 50 };
+		IKI_Circle circle_a = { SCREEN_WIDTH/4, SCREEN_HEIGHT/2, 40 };
+		IKI_Circle circle_b = { 3*SCREEN_WIDTH/4, SCREEN_HEIGHT/2, 40 };
 		IKI_Scene scene = { &circle_a, &circle_b };
 
 		timer_id = SDL_AddTimer(33, timer_function_draw_event, NULL);
