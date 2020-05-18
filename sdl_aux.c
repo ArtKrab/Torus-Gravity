@@ -30,6 +30,11 @@ void IKI_DrawCircle(SDL_Renderer *renderer, IKI_Circle const *circle, int const 
 	    //Полуширина текущих линий с центром в cx
 		int x_offset = (int)sqrt(circle->r * circle->r - h * h);
 
+        //SDL_RenderDrawLine(renderer, circle->cx - x_offset, circle->cy - h, circle->cx + x_offset, circle->cy - h);
+        //SDL_RenderDrawLine(renderer, circle->cx - x_offset, circle->cy + h, circle->cx + x_offset, circle->cy + h);
+
+
+
 		//Здесь проверяется нужно ли вообще хитрить с вырисовыванием текущей (!) линии:
 		//(x_offset < cx < screen_w-x_offset) и (h < cy < screen_h-h)
 		//1 - вблизи нет x-границ
