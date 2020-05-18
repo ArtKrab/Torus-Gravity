@@ -38,6 +38,10 @@ void draw_scene(SDL_Renderer *renderer, IKI_Scene const *scene, int const screen
 	SDL_RenderPresent(renderer);
 }
 
+//Функция для вывода на экран полной энергии системы
+void log_energy(Model const *model) {
+    printf("ax=%f\n", model->a.loc.x);
+}
 
 //Функция преобразования из координат модели в координаты окна
 void map_model_to_scene(Model const *model, IKI_Scene *scene, int const screen_w, int const screen_h) {
@@ -75,10 +79,10 @@ int main(int agc, char **argv) {
 		}
 
         //Данные модели (model) и шаг по времени (dt)
-		Model model = {1, {-0.5, 0}, {0, 5},
-                       1, {0.5, 0}, {0, -5},
-                       0.05};
-		double dt = 2.5e-7; //TODO(Значение G const)
+		Model model = {1, {-0.5, 0}, {0, 1},
+                       1, {0.5, 0}, {-1, 0},
+                       5};
+		double dt = 2.5e-6; //TODO(Значение G const)
 
         //При изменении начального положения тел в модели изменить и здесь (?)
 		IKI_Circle circle_a = { SCREEN_WIDTH/4, SCREEN_HEIGHT/2, 40 };
@@ -100,8 +104,15 @@ int main(int agc, char **argv) {
 
 					case SDL_USEREVENT:
 					{
+                        //log_energy(&model);
 						map_model_to_scene(&model, &scene, SCREEN_WIDTH, SCREEN_HEIGHT);
 						draw_scene(main_renderer, &scene, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                        //IKI_Circle test = {SCREEN_WIDTH/2, SCREEN_HEIGHT/2,50};
+                        //SDL_SetRenderDrawColor(main_renderer, 0x00, 0xFF, 0x00, 0xFF);
+                        //IKI_DrawCircle(main_renderer, &test, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+                        SDL_RenderPresent(main_renderer);
 						break;
 					}
 				}

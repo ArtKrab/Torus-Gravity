@@ -13,16 +13,16 @@ Vector closest_radius (Vector loc_a, Vector loc_b) {
 }
 //Функция 'телепортации' тела при пересечении границы
 void teleport_body (Vector *loc) {
-    if (abs(loc->x) > 1.0) {
+    if (abs(loc->x) >= 1.0) {
         loc->x = loc->x > 1.0 ? loc->x - 2.0 : loc->x + 2.0;
     }
-    if (abs(loc->y) > 1.0) {
+    if (abs(loc->y) >= 1.0) {
         loc->y = loc->y > 1.0 ? loc->y - 2.0 : loc->y + 2.0;
     }
 }
 
 //УДААААААААААААААААААААААААААААААААР (упругий)
-void elastic_collision(Vector loc_a, Vector loc_b, Vector v_a, Vector v_b) {
+void elastic_collision(Body a, Body b) {
 
 }
 
