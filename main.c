@@ -70,7 +70,7 @@ int main(int agc, char **argv) {
 		SDL_Renderer *main_renderer = NULL;
 		SDL_TimerID timer_id;
 
-		int const SCREEN_WIDTH = 1000, SCREEN_HEIGHT = 700; //TODO(Сыграть с нормировкой пространства в НЕквадратном окне)
+		int const SCREEN_WIDTH = 700, SCREEN_HEIGHT = 700; //TODO(Сыграть с нормировкой пространства в НЕквадратном окне)
 		const char *error_message = "";
 
 		if (*(error_message = init_window_and_renderer(&main_window, &main_renderer, SCREEN_WIDTH, SCREEN_HEIGHT, "SDL Render Draw Example"))) {
@@ -79,9 +79,9 @@ int main(int agc, char **argv) {
 		}
 
         //Данные модели (model) и шаг по времени (dt)
-		Model model = {1, {-0.5, 0}, {0, 1},
-                       1, {0.5, 0}, {-1, 0},
-                       5};
+		Model model = {1, {-0.5, 0}, {0, 0.5},
+                       1, {0.5, 0}, {0, 0},
+                       0.05};
 		double dt = 2.5e-6; //TODO(Значение G const)
 
         //При изменении начального положения тел в модели изменить и здесь (?)
@@ -118,7 +118,8 @@ int main(int agc, char **argv) {
 				}
 			}
 
-			model_predictor_time_step(&model, dt);  //раскомментировать для вычисления движения тела по схеме 'предиктор-корректор'
+			model_predictor_time_step(&model, dt, 2.0*(scene.Circle_a->r+scene.Circle_b->r)/SCREEN_HEIGHT);
+			//TODO(min_rad относится только к HEIGHT, можно приделать скалирование для окна)
 			
 		}
 

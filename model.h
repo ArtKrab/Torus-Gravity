@@ -14,4 +14,4 @@ typedef struct {
     double G; //гравитационная постоянная
 } Model;
 
-void model_predictor_time_step(Model *model, double dt);
+void model_predictor_time_step(Model *model, double dt, double const min_radius);
